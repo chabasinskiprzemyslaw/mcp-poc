@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="OpenAI" Version="2.9.1" />
+    <PackageReference Include="System.CommandLine" Version="2.0.5" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,141 @@
+{
+  "version": "1",
+  "servers": [
+    {
+      "serverId": "calculator-local",
+      "name": "Calculator-Local",
+      "transport": "http",
+      "baseUrl": "http://localhost:8001",
+      "author": "mcp-poc-team",
+      "capabilities": ["tools:math", "tools:add"],
+      "priority": 100,
+      "health": {
+        "path": "/health",
+        "retryCount": 2,
+        "retryDelayMs": 250,
+        "timeoutMs": 2000
+      },
+      "tags": ["tools:math", "domain:docs", "env:local"],
+      "version": "1.0.0"
+    },
+    {
+      "serverId": "search-local",
+      "name": "Search-Local",
+      "transport": "http",
+      "baseUrl": "http://localhost:8002",
+      "author": "mcp-poc-team",
+      "capabilities": ["tools:search", "domain:docs"],
+      "priority": 95,
+      "health": {
+        "path": "/health",
+        "retryCount": 2,
+        "retryDelayMs": 250,
+        "timeoutMs": 2000
+      },
+      "tags": ["domain:docs", "env:local"],
+      "version": "1.0.0"
+    },
+    {
+      "serverId": "db-query-local",
+      "name": "DBQuery-Local",
+      "transport": "http",
+      "baseUrl": "http://localhost:8003",
+      "author": "mcp-poc-team",
+      "capabilities": ["tools:sql", "domain:data"],
+      "priority": 110,
+      "health": {
+        "path": "/health",
+        "retryCount": 2,
+        "retryDelayMs": 250,
+        "timeoutMs": 2000
+      },
+      "tags": ["tools:sql", "domain:docs", "env:local"],
+      "version": "1.0.0"
+    },
+    {
+      "serverId": "risk-check-local",
+      "name": "RiskCheck-Local",
+      "transport": "http",
+      "baseUrl": "http://localhost:8004",
+      "author": "mcp-poc-team",
+      "capabilities": ["tools:risk", "domain:finance"],
+      "priority": 90,
+      "health": {
+        "path": "/health",
+        "retryCount": 2,
+        "retryDelayMs": 250,
+        "timeoutMs": 2000
+      },
+      "tags": ["domain:finance", "env:local"],
+      "version": "1.0.0"
+    },
+    {
+      "serverId": "calculator-mcp-local",
+      "name": "Calculator-MCP-Local",
+      "transport": "mcp-http",
+      "baseUrl": "http://localhost:9001",
+      "author": "mcp-poc-team",
+      "capabilities": ["tools:math", "protocol:mcp"],
+      "priority": 120,
+      "health": {
+        "path": "/mcp",
+        "retryCount": 2,
+        "retryDelayMs": 250,
+        "timeoutMs": 2000
+      },
+      "tags": ["tools:math", "protocol:mcp", "env:local"],
+      "version": "1.0.0"
+    },
+    {
+      "serverId": "search-mcp-local",
+      "name": "Search-MCP-Local",
+      "transport": "mcp-http",
+      "baseUrl": "http://localhost:9002",
+      "author": "mcp-poc-team",
+      "capabilities": ["tools:search", "domain:docs", "protocol:mcp"],
+      "priority": 115,
+      "health": {
+        "path": "/mcp",
+        "retryCount": 2,
+        "retryDelayMs": 250,
+        "timeoutMs": 2000
+      },
+      "tags": ["domain:docs", "protocol:mcp", "env:local"],
+      "version": "1.0.0"
+    },
+    {
+      "serverId": "db-query-mcp-local",
+      "name": "DBQuery-MCP-Local",
+      "transport": "mcp-http",
+      "baseUrl": "http://localhost:9003",
+      "author": "mcp-poc-team",
+      "capabilities": ["tools:sql", "domain:data", "protocol:mcp"],
+      "priority": 130,
+      "health": {
+        "path": "/mcp",
+        "retryCount": 2,
+        "retryDelayMs": 250,
+        "timeoutMs": 2000
+      },
+      "tags": ["tools:sql", "domain:data", "protocol:mcp", "env:local"],
+      "version": "1.0.0"
+    },
+    {
+      "serverId": "risk-check-mcp-local",
+      "name": "RiskCheck-MCP-Local",
+      "transport": "mcp-http",
+      "baseUrl": "http://localhost:9004",
+      "author": "mcp-poc-team",
+      "capabilities": ["tools:risk", "domain:finance", "protocol:mcp"],
+      "priority": 110,
+      "health": {
+        "path": "/mcp",
+        "retryCount": 2,
+        "retryDelayMs": 250,
+        "timeoutMs": 2000
+      },
+      "tags": ["domain:finance", "protocol:mcp", "env:local"],
+      "version": "1.0.0"
+    }
+  ]
+}

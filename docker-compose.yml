@@ -26,3 +26,63 @@ services:
     container_name: mcp-risk-check-tool
     ports:
       - "8004:8080"
+
+  mcp-calculator:
+    build:
+      context: ./server/mcp_wrappers
+    container_name: mcp-calculator-wrapper
+    depends_on:
+      - calculator-tool
+    environment:
+      CALCULATOR_TOOL_BASE_URL: http://calculator-tool:8080
+      MCP_TRANSPORT: http
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: 9001
+    command: ["python", "calculator_mcp_server.py"]
+    ports:
+      - "9001:9001"
+
+  mcp-search:
+    build:
+      context: ./server/mcp_wrappers
+    container_name: mcp-search-wrapper
+    depends_on:
+      - search-tool
+    environment:
+      SEARCH_TOOL_BASE_URL: http://search-tool:8080
+      MCP_TRANSPORT: http
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: 9002
+    command: ["python", "search_mcp_server.py"]
+    ports:
+      - "9002:9002"
+
+  mcp-db-query:
+    build:
+      context: ./server/mcp_wrappers
+    container_name: mcp-db-query-wrapper
+    depends_on:
+      - db-query-tool
+    environment:
+      DB_QUERY_TOOL_BASE_URL: http://db-query-tool:8080
+      MCP_TRANSPORT: http
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: 9003
+    command: ["python", "db_query_mcp_server.py"]
+    ports:
+      - "9003:9003"
+
+  mcp-risk-check:
+    build:
+      context: ./server/mcp_wrappers
+    container_name: mcp-risk-check-wrapper
+    depends_on:
+      - risk-check-tool
+    environment:
+      RISK_CHECK_TOOL_BASE_URL: http://risk-check-tool:8080
+      MCP_TRANSPORT: http
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: 9004
+    command: ["python", "risk_check_mcp_server.py"]
+    ports:
+      - "9004:9004"

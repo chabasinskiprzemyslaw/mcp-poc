@@ -104,3 +104,115 @@
 - Add request/response logging and correlation IDs across services.
 - Add lightweight contract tests for each HTTP endpoint.
 - Wire client/policy router to call these local services based on context rules.
+
+## Iteration 4 - FastMCP Wrapper Layer for Tool Services
+
+### What We Did
+
+- Added `server\mcp_wrappers` with four FastMCP servers:
+  - `calculator_mcp_server.py`
+  - `search_mcp_server.py`
+  - `db_query_mcp_server.py`
+  - `risk_check_mcp_server.py`
+- Implemented MCP tools that delegate to existing Flask HTTP services.
+- Added shared lightweight HTTP JSON client helper for wrapper-to-service calls.
+- Extended `docker-compose.yml` to run the 4 MCP wrappers alongside 4 HTTP tool services.
+
+### What We Expected
+
+- A clean separation between MCP protocol handling and tool execution logic.
+- Ability to run realistic multi-server MCP setup over HTTP transport for routing experiments.
+
+### What Changed
+
+- Existing Python services remain execution backends.
+- FastMCP wrappers now expose MCP endpoints (`/mcp`) on separate ports (`9001-9004`).
+- Documentation updated with wrapper startup and configuration.
+
+### What We Learned
+
+- Wrapper architecture keeps core tool services reusable outside MCP.
+- FastMCP provides low-friction MCP server exposure with simple function decorators.
+
+### Follow-ups
+
+- Add contract/integration tests for MCP wrapper tool responses.
+- Add health/readiness checks in compose for wrapper startup ordering.
+- Add authentication controls if moving beyond local-only use.
+
+## Iteration 5 - Client Server Registry (Filesystem + Hot Reload)
+
+### What We Did
+
+- Added `client\McpPoc.Client\ServerRegistry.cs` as a separate registry module.
+- Added registry JSON schema with per-server fields:
+  - `serverId`, `name`, `transport`, `baseUrl`/`command`, `author`, `capabilities`, `priority`, `health`, `tags`, `version`.
+- Added stable-ID validation and logical-name separation from endpoint addressing.
+- Added simple HTTP health checks with retry policy and latency/error tracking.
+- Added hot reload for registry file updates via filesystem watcher.
+- Added client commands for operational visibility:
+  - `/servers`
+  - `/servers health`
+  - `/servers metrics`
+  - `/servers find <tag...>`
+
+### What We Expected
+
+- Practical PoC-friendly registry that can evolve toward DB-backed service discovery later.
+- Better routing/fallback decisions based on priority, health, latency, and error rate signals.
+
+### What Changed
+
+- Client startup now loads server registry from `MCP_SERVER_REGISTRY_PATH` (or default `.mcp-server-registry.json`).
+- Added `.mcp-server-registry.example.json` and local `.mcp-server-registry.json`.
+- Added env and ignore updates for registry file handling.
+
+### What We Learned
+
+- Registry-as-file is enough for early MCP orchestration experiments.
+- Separating logical IDs from physical endpoints keeps future migration paths cleaner.
+- Runtime metrics provide immediate insight for fallback ordering.
+
+### Follow-ups
+
+- Add circuit breaker state transitions (open/half-open/closed) for repeated failures.
+- Add capability discovery cache with refresh-on-reconnect strategy.
+- Move endpoint/secrets management to dedicated config + secret store for non-local environments.
+
+## Iteration 6 - MCP Client Core in .NET Host
+
+### What We Did
+
+- Added `client\McpPoc.Client\McpClient.cs` implementing MCP client basics:
+  - `initialize`
+  - `notifications/initialized`
+  - `tools/list`
+  - `tools/call`
+- Implemented HTTP JSON-RPC request/response handling for MCP wrapper endpoints.
+- Added local command surface in client:
+  - `/mcp tools <serverId>`
+  - `/mcp call <serverId> <toolName> "<jsonArgs>"`
+  - `/mcp route-call <toolName> "<jsonArgs>" <tag...>`
+- Integrated route-call fallback with server registry ordering and runtime metrics.
+- Expanded registry examples to include MCP wrapper entries (`transport = mcp-http`, ports `9001-9004`).
+
+### What We Expected
+
+- First practical host-side MCP client loop aligned with initial research notes.
+- Ability to discover and invoke tools from local FastMCP servers from within the .NET client.
+
+### What Changed
+
+- Client now supports explicit MCP tool discovery/call commands in addition to OpenAI chat loop.
+- Registry can now represent both direct HTTP services and MCP HTTP wrapper servers.
+
+### What We Learned
+
+- Minimal MCP lifecycle and tool invocation can be integrated cleanly without overbuilding transport abstractions for PoC.
+- Registry + metrics provides an immediate path to deterministic fallback routing.
+
+### Follow-ups
+
+- Add full protocol notifications handling (`listChanged`, progress, logging).
+- Add reconnect supervisor and protocol-version negotiation fallback.
+- Add dedicated MCP transport abstraction (`ITransport`) as complexity grows.

@@ -8,6 +8,7 @@
 .env.*
 !.env.example
 .openai-chat-history.json
+.mcp-server-registry.json
 server/services/db_query_tool/data/sample.db
 
 # User-specific files

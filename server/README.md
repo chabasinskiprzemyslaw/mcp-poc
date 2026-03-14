@@ -23,6 +23,13 @@ This directory now contains simple HTTP services that simulate MCP tool backends
   - Static finance-style risk rules.
   - Endpoint:
     - `POST /risk-check`
+- `mcp_wrappers\`
+  - FastMCP wrappers exposing MCP tools over HTTP transport and delegating to the HTTP services above.
+  - Wrapper scripts:
+    - `calculator_mcp_server.py`
+    - `search_mcp_server.py`
+    - `db_query_mcp_server.py`
+    - `risk_check_mcp_server.py`
 
 ## Running all services
 
@@ -38,3 +45,24 @@ Ports:
 - Search: `http://localhost:8002`
 - DB Query: `http://localhost:8003`
 - Risk Check: `http://localhost:8004`
+- MCP Calculator server: `http://localhost:9001/mcp`
+- MCP Search server: `http://localhost:9002/mcp`
+- MCP DB Query server: `http://localhost:9003/mcp`
+- MCP Risk Check server: `http://localhost:9004/mcp`
+
+## Running wrappers locally without Docker
+
+From `server\mcp_wrappers`:
+
+```bash
+pip install -r requirements.txt
+python calculator_mcp_server.py
+python search_mcp_server.py
+python db_query_mcp_server.py
+python risk_check_mcp_server.py
+```
+
+Each wrapper supports:
+- `MCP_TRANSPORT` (default `http`)
+- `MCP_HOST` (default `0.0.0.0`)
+- `MCP_PORT` (wrapper-specific default: `9001-9004`)
