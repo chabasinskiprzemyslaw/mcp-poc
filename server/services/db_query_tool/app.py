@@ -27,9 +27,6 @@ DISALLOWED_KEYWORDS = {
 
 def initialize_db():
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    if DB_PATH.exists():
-        return
-
     script = INIT_SQL_PATH.read_text(encoding="utf-8")
     with sqlite3.connect(DB_PATH) as connection:
         connection.executescript(script)

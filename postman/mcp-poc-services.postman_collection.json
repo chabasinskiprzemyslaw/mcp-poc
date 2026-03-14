@@ -1,0 +1,304 @@
+{
+  "info": {
+    "_postman_id": "7db5d9ab-7b55-4e87-b8e6-d0f15871356e",
+    "name": "MCP PoC Services",
+    "description": "Collection for local MCP PoC HTTP tool simulations: calculator, search, db query, and risk check.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Calculator Tool",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{calculatorBaseUrl}}/health",
+              "host": [
+                "{{calculatorBaseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Calculate - Multiply",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation\": \"multiply\",\n  \"a\": 12,\n  \"b\": 3.5\n}"
+            },
+            "url": {
+              "raw": "{{calculatorBaseUrl}}/calculate",
+              "host": [
+                "{{calculatorBaseUrl}}"
+              ],
+              "path": [
+                "calculate"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Multiple",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numbers\": [1, 2, 3.5, 10]\n}"
+            },
+            "url": {
+              "raw": "{{calculatorBaseUrl}}/add-multiple",
+              "host": [
+                "{{calculatorBaseUrl}}"
+              ],
+              "path": [
+                "add-multiple"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search Tool",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{searchBaseUrl}}/health",
+              "host": [
+                "{{searchBaseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Movies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{searchBaseUrl}}/movies",
+              "host": [
+                "{{searchBaseUrl}}"
+              ],
+              "path": [
+                "movies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Movies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{searchBaseUrl}}/search?q={{searchQuery}}",
+              "host": [
+                "{{searchBaseUrl}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "{{searchQuery}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "DB Query Tool",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{dbQueryBaseUrl}}/health",
+              "host": [
+                "{{dbQueryBaseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Customers by Country",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sql\": \"SELECT id, name, segment, country FROM customers WHERE country = ?\",\n  \"params\": [\"US\"]\n}"
+            },
+            "url": {
+              "raw": "{{dbQueryBaseUrl}}/query",
+              "host": [
+                "{{dbQueryBaseUrl}}"
+              ],
+              "path": [
+                "query"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Top Paid Orders",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sql\": \"SELECT id, customer_id, amount, currency, status FROM orders WHERE status = ? ORDER BY amount DESC LIMIT 3\",\n  \"params\": [\"paid\"]\n}"
+            },
+            "url": {
+              "raw": "{{dbQueryBaseUrl}}/query",
+              "host": [
+                "{{dbQueryBaseUrl}}"
+              ],
+              "path": [
+                "query"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Risk Check Tool",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{riskCheckBaseUrl}}/health",
+              "host": [
+                "{{riskCheckBaseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Risk Check - Low",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 250,\n  \"country\": \"PL\",\n  \"merchant_category\": \"retail\"\n}"
+            },
+            "url": {
+              "raw": "{{riskCheckBaseUrl}}/risk-check",
+              "host": [
+                "{{riskCheckBaseUrl}}"
+              ],
+              "path": [
+                "risk-check"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Risk Check - High",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 12000,\n  \"country\": \"RU\",\n  \"merchant_category\": \"crypto\"\n}"
+            },
+            "url": {
+              "raw": "{{riskCheckBaseUrl}}/risk-check",
+              "host": [
+                "{{riskCheckBaseUrl}}"
+              ],
+              "path": [
+                "risk-check"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "calculatorBaseUrl",
+      "value": "http://localhost:8001"
+    },
+    {
+      "key": "searchBaseUrl",
+      "value": "http://localhost:8002"
+    },
+    {
+      "key": "dbQueryBaseUrl",
+      "value": "http://localhost:8003"
+    },
+    {
+      "key": "riskCheckBaseUrl",
+      "value": "http://localhost:8004"
+    },
+    {
+      "key": "searchQuery",
+      "value": "sci-fi"
+    }
+  ]
+}
