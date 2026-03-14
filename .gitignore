@@ -5,6 +5,9 @@
 
 # dotenv files
 .env
+.env.*
+!.env.example
+.openai-chat-history.json
 
 # User-specific files
 *.rsuser

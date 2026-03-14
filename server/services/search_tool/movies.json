@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "title": "Inception",
+    "year": 2010,
+    "genres": ["Sci-Fi", "Thriller"],
+    "description": "A skilled thief enters layered dreams to plant an idea into a target's mind."
+  },
+  {
+    "id": 2,
+    "title": "The Matrix",
+    "year": 1999,
+    "genres": ["Sci-Fi", "Action"],
+    "description": "A programmer discovers reality is a simulation and joins a rebellion against machines."
+  },
+  {
+    "id": 3,
+    "title": "Interstellar",
+    "year": 2014,
+    "genres": ["Sci-Fi", "Drama"],
+    "description": "A team travels through a wormhole searching for a new home for humanity."
+  },
+  {
+    "id": 4,
+    "title": "The Social Network",
+    "year": 2010,
+    "genres": ["Drama", "Biography"],
+    "description": "The story of Facebook's founding and the legal conflicts that followed."
+  },
+  {
+    "id": 5,
+    "title": "Moneyball",
+    "year": 2011,
+    "genres": ["Drama", "Sports"],
+    "description": "A baseball manager builds a competitive team using data-driven player analysis."
+  }
+]

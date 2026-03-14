@@ -1,0 +1,28 @@
+services:
+  calculator-tool:
+    build:
+      context: ./server/services/calculator_tool
+    container_name: mcp-calculator-tool
+    ports:
+      - "8001:8080"
+
+  search-tool:
+    build:
+      context: ./server/services/search_tool
+    container_name: mcp-search-tool
+    ports:
+      - "8002:8080"
+
+  db-query-tool:
+    build:
+      context: ./server/services/db_query_tool
+    container_name: mcp-db-query-tool
+    ports:
+      - "8003:8080"
+
+  risk-check-tool:
+    build:
+      context: ./server/services/risk_check_tool
+    container_name: mcp-risk-check-tool
+    ports:
+      - "8004:8080"
