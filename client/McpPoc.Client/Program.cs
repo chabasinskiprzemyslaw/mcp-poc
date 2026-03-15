@@ -35,7 +35,7 @@ Console.WriteLine($"History: {historyFilePath}");
 Console.WriteLine($"Stored messages: {conversationHistory.Count}");
 Console.WriteLine($"Server registry: {registryFilePath}");
 Console.WriteLine($"Registered servers: {serverRegistry.Entries.Count}");
-Console.WriteLine("Commands: /servers..., /mcp tools <serverId>, /mcp call <serverId> <tool> \"<jsonArgs>\", /mcp route-call <tool> \"<jsonArgs>\" <tag...>");
+Console.WriteLine("Commands: /servers..., /mcp show, /mcp tools <serverId>, /mcp call <serverId> <tool> \"<jsonArgs>\", /mcp route-call <tool> \"<jsonArgs>\" <tag...>");
 Console.WriteLine("Type a prompt and press Enter. Type 'exit' to quit.");
 Console.WriteLine();
 
@@ -332,6 +332,13 @@ static RootCommand BuildLocalRootCommand(ServerRegistry registry, McpClient mcpC
 
     var mcpCommand = new Command("mcp", "Inspect and invoke MCP servers");
 
+    var mcpShowCommand = new Command("show", "List available MCP-capable servers");
+    mcpShowCommand.SetAction(_ =>
+    {
+        PrintAvailableMcpServers(registry);
+        return 0;
+    });
+
     var serverIdArgument = new Argument<string>("serverId")
     {
         Description = "Registry serverId"
@@ -393,6 +400,7 @@ static RootCommand BuildLocalRootCommand(ServerRegistry registry, McpClient mcpC
         return 0;
     });
 
+    mcpCommand.Subcommands.Add(mcpShowCommand);
     mcpCommand.Subcommands.Add(mcpToolsCommand);
     mcpCommand.Subcommands.Add(mcpCallCommand);
     mcpCommand.Subcommands.Add(mcpRouteCallCommand);
@@ -403,7 +411,7 @@ static RootCommand BuildLocalRootCommand(ServerRegistry registry, McpClient mcpC
 
 static void PrintLocalCommandUsage()
 {
-    Console.WriteLine("Unknown local command. Use: /servers ... | /mcp tools <serverId> | /mcp call <serverId> <tool> \"<jsonArgs>\" | /mcp route-call <tool> \"<jsonArgs>\" <tag...>");
+    Console.WriteLine("Unknown local command. Use: /servers ... | /mcp show | /mcp tools <serverId> | /mcp call <serverId> <tool> \"<jsonArgs>\" | /mcp route-call <tool> \"<jsonArgs>\" <tag...>");
 }
 
 static void PrintServers(ServerRegistry registry)
@@ -479,6 +487,34 @@ static void PrintCandidatesByTags(ServerRegistry registry, string[] tags)
     foreach (var entry in candidates)
     {
         Console.WriteLine($"- {entry.ServerId} ({entry.Name}) priority={entry.Priority} tags=[{string.Join(", ", entry.Tags)}] capabilities=[{string.Join(", ", entry.Capabilities)}]");
+    }
+}
+
+static void PrintAvailableMcpServers(ServerRegistry registry)
+{
+    var entries = registry.Entries
+        .Where(entry => string.Equals(entry.Transport, "mcp-http", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(entry.Transport, "http", StringComparison.OrdinalIgnoreCase))
+        .OrderByDescending(entry => entry.Priority)
+        .ThenBy(entry => entry.ServerId, StringComparer.OrdinalIgnoreCase)
+        .ToArray();
+
+    if (entries.Length == 0)
+    {
+        Console.WriteLine("No MCP-capable servers are currently registered.");
+        return;
+    }
+
+    Console.WriteLine("Available MCP servers:");
+    foreach (var entry in entries)
+    {
+        var endpoint = string.IsNullOrWhiteSpace(entry.BaseUrl)
+            ? "(missing baseUrl)"
+            : (entry.BaseUrl.EndsWith("/mcp", StringComparison.OrdinalIgnoreCase)
+                ? entry.BaseUrl
+                : $"{entry.BaseUrl.TrimEnd('/')}/mcp");
+
+        Console.WriteLine($"- {entry.ServerId} ({entry.Name}) transport={entry.Transport} priority={entry.Priority} endpoint={endpoint}");
     }
 }
 
