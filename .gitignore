@@ -9,6 +9,8 @@
 !.env.example
 .openai-chat-history.json
 .mcp-server-registry.json
+.side-note-mcp-tool-context-cache.md
+AppSeparateFolderLearning/
 server/services/db_query_tool/data/sample.db
 
 # User-specific files
